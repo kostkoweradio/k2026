@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kostkowe Radio – Nowa Oprawa</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: #0d0d0d;
+        color: white;
+    }
+
+    /* --- NOWOCZESNE ZAOKRĄGLONE MENU --- */
+    header {
+        background: rgba(0,0,0,0.55);
+        backdrop-filter: blur(10px);
+        padding: 12px 35px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo img {
+        height: 55px;
+    }
+
+    nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* RAMKA ZAOKRĄGLONA — WRACA */
+
+.nav-box {
+    display: flex;
+    gap: 25px;
+    padding: 10px 20px;
+    border-radius: 20px;
+
+    /* neon */
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,150,255,0.6);
+    box-shadow:
+        0 0 8px rgba(0,150,255,0.6),
+        0 0 15px rgba(0,150,255,0.4),
+        inset 0 0 8px rgba(0,150,255,0.3);
+
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+}
+
+.nav-box:hover {
+    box-shadow:
+        0 0 12px rgba(0,150,255,0.8),
+        0 0 22px rgba(0,150,255,0.6),
+        inset 0 0 10px rgba(0,150,255,0.4);
+}
+
+.nav-box a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 17px;
+    transition: 0.3s;
+}
+
+.nav-box a:hover {
+    color: #4da6ff;
+}
+
+/* IKONA LUPY — OBOK, NIE W RAMCE */
+.search-icon {
+    font-size: 26px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.search-icon:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+    nav a {
+        margin: 0 15px;
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        font-size: 17px;
+        transition: 0.3s;
+    }
+
+    nav a:hover {
+        color: #4da6ff;
+    }
+
+    /* --- HERO Z OBRAZEM NIE NA CAŁĄ STRONĘ --- */
+    .hero {
+        position: relative;
+        height: 550px;
+        background: url('https://kostkoweradio.github.io/strona-glowna/0yg11h.jpg') no-repeat center/cover;
+        border-bottom: 2px solid rgba(255,255,255,0.15);
+    }
+
+    /* NAPIS W DOLNYM LEWYM ROGU */
+    .hero-text {
+        position: absolute;
+        bottom: 25px;
+        left: 25px;
+        background: rgba(0,0,0,0.55);
+        padding: 15px 25px;
+        border-radius: 12px;
+        backdrop-filter: blur(4px);
+    }
+
+    .hero-text h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    .hero-text p {
+        margin: 5px 0 0;
+        font-size: 18px;
+        opacity: 0.9;
+    }
+
+    /* --- PRZYKŁADOWE SEKCJE POD OBRAZEM --- */
+    section {
+        padding: 40px 30px;
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    /* --- STOPKA --- */
+    footer {
+        text-align: center;
+        padding: 20px;
+        background: rgba(0,0,0,0.55);
+        margin-top: 40px;
+        font-size: 14px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+/* --- DRUGA SEKCJA: O NAS --- */
+.about {
+    padding: 50px 30px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.about h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.about p {
+    font-size: 18px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* --- PODCASTY --- */
+.podcasty {
+    padding: 50px 30px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.podcasty h2 {
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+/* KAFEL PODCASTU */
+.podcast-box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.15);
+    margin-bottom: 20px;
+}
+
+.podcast-box h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+}
+
+.podcast-box p {
+    margin: 0 0 15px;
+    opacity: 0.85;
+}
+
+.podcast-box .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: #4da6ff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.podcast-box .btn:hover {
+    background: #1f7ed6;
+}
+.search-icon {
+    font-size: 24px;
+    vertical-align: middle;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-icon:hover {
+    color: #4da6ff;
+}
+
+.more-podcasts {
+    margin-top: 10px;
+}
+
+.more-podcasts a {
+    color: #4da6ff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.more-podcasts a:hover {
+    color: #1f7ed6;
+}
+
+news {
+    padding: 50px 30px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.news h2 {
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.news-item {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.news-item h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.news-item p {
+    margin: 0;
+    opacity: 0.85;
+}
+
+.more-news {
+    margin-top: 20px;
+}
+
+.more-news a {
+    color: #4da6ff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.more-news a:hover {
+    color: #1f7ed6;
+}
+
+.search-bar {
+    width: 100%;
+    display: none;
+    padding: 12px 0;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 17px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    backdrop-filter: blur(6px);
+}
+
+.listen-radio {
+    padding: 60px 30px;
+    text-align: center;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.listen-radio h2 {
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+/* NEONOWY PRZYCISK */
+.radio-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+
+    background: rgba(0,150,255,0.15);
+    border: 2px solid rgba(0,150,255,0.7);
+    border-radius: 16px;
+
+    box-shadow:
+        0 0 10px rgba(0,150,255,0.6),
+        0 0 20px rgba(0,150,255,0.4),
+        inset 0 0 10px rgba(0,150,255,0.3);
+
+    backdrop-filter: blur(8px);
+    transition: 0.3s;
+}
+
+.radio-btn:hover {
+    background: rgba(0,150,255,0.25);
+    box-shadow:
+        0 0 14px rgba(0,150,255,0.8),
+        0 0 28px rgba(0,150,255,0.6),
+        inset 0 0 12px rgba(0,150,255,0.4);
+}
+</style>
+
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="https://twoj-adres-logo.pl/logo.png" alt="Kostkowe Radio">
+    </div>
+
+    <nav>
+        <span class="search-icon material-symbols-rounded">search</span>
+<div id="searchBar" class="search-bar">
+    <input type="text" id="searchInput" placeholder="Szukaj...">
+</div>
+    <div class="nav-box">
+        <a href="#">Wiadomości</a>
+        <a href="#">Ramówka</a>
+        <a href="#">Informacje</a>
+        <a href="#">Kontakt</a>
+    </div>
+</nav>
+</header>
+
+<div class="hero">
+    <div class="hero-text">
+        <h1>Kostkowe Radio</h1>
+        <p>Zmiany Kostkowego Radia — od 1 sierpnia 2026</p>
+    </div>
+</div>
+
+<section class="about">
+    <h2>Co to jest Kostkowe Radio?</h2>
+    <p>
+        Kostkowe Radio to internetowe radio stworzone z pasji do muzyki i kreatywności. 
+        Nadajemy muzykę 24/7, prowadzimy audycje i tworzymy miejsce dla fanów kostek, 
+        dźwięków i dobrej zabawy!
+    </p>
+</section>
+
+<section class="podcasty">
+    <h2>Najnowsze podcasty</h2>
+
+    <div class="podcast-box">
+        <h3>Odcinek 1: Start Kostkowego Radia</h3>
+        <p>Posłuchaj jak powstało Kostkowe Radio</p>
+        <a href="/podcast/watch?id=1" class="btn">Przejdź do odtwarzacza</a>
+    </div>
+    <div class="more-podcasts">
+    <a href="/podcasty/">Pokaż wszystkie podcasty</a>
+</div>
+</section>
+
+<section class="news">
+    <h2>Najnowsze wiadomości ze świata</h2>
+
+    <div class="news-list">
+        <div class="news-item">
+            <h3>Wiadomość 1</h3>
+            <p>Krótki opis wiadomości, maksymalnie dwie linijki tekstu.</p>
+        </div>
+
+        <div class="news-item">
+            <h3>Wiadomość 2</h3>
+            <p>Krótki opis wiadomości, maksymalnie dwie linijki tekstu.</p>
+        </div>
+
+        <div class="news-item">
+            <h3>Wiadomość 3</h3>
+            <p>Krótki opis wiadomości, maksymalnie dwie linijki tekstu.</p>
+        </div>
+
+        <div class="news-item">
+            <h3>Wiadomość 4</h3>
+            <p>Krótki opis wiadomości, maksymalnie dwie linijki tekstu.</p>
+        </div>
+
+        <div class="news-item">
+            <h3>Wiadomość 5</h3>
+            <p>Krótki opis wiadomości, maksymalnie dwie linijki tekstu.</p>
+        </div>
+    </div>
+
+    <div class="more-news">
+        <a href="/wiadomosci/">Pokaż więcej</a>
+    </div>
+</section>
+
+<section class="listen-radio">
+    <h2>Chcesz posłuchać Radia?</h2>
+    <a href="/player/" class="radio-btn">Otwórz player</a>
+</section>
+
+<footer>
+    © 2023–2026 Kostkowe Radio
+</footer>
+
+<script>
+const searchIcon = document.querySelector('.search-icon');
+const searchBar = document.getElementById('searchBar');
+const searchInput = document.getElementById('searchInput');
+
+let searchOpen = false;
+
+searchIcon.addEventListener('click', () => {
+    if (!searchOpen) {
+        searchBar.style.display = 'block';
+        searchInput.focus();
+        searchOpen = true;
+    } else {
+        const keyword = searchInput.value.trim();
+        if (keyword !== "") {
+            window.location.href = `/szukaj/keyword?=${encodeURIComponent(keyword)}`;
+        }
+        searchBar.style.display = 'none';
+        searchOpen = false;
+    }
+});
+
+searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const keyword = searchInput.value.trim();
+        if (keyword !== "") {
+            window.location.href = `/szukaj/keyword?=${encodeURIComponent(keyword)}`;
+        }
+    }
+});
+</script>
+</body>
+</html>

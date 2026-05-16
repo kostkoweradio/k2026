@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wyniki wyszukiwania</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: #0d0d0d;
+        color: white;
+    }
+
+    /* HEADER (ten sam styl co na stronie głównej) */
+    header {
+        backdrop-filter: blur(10px);
+        background: rgba(0,0,0,0.45);
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo img {
+        height: 55px;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-box {
+        display: flex;
+        gap: 25px;
+        padding: 10px 20px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(0,150,255,0.6);
+        box-shadow:
+            0 0 8px rgba(0,150,255,0.6),
+            0 0 15px rgba(0,150,255,0.4),
+            inset 0 0 8px rgba(0,150,255,0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .nav-box a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        font-size: 17px;
+    }
+
+    .search-icon {
+        font-size: 26px;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 50%;
+    }
+
+    /* WYSZUKIWARKA POD MENU */
+    .search-bar {
+        width: 100%;
+        display: none;
+        padding: 12px 40px;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 12px 18px;
+        font-size: 17px;
+        border-radius: 12px;
+        border: none;
+        outline: none;
+        background: rgba(255,255,255,0.15);
+        color: white;
+        backdrop-filter: blur(6px);
+    }
+
+    /* SEKCJA WYNIKÓW */
+    .results {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .results h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .counts {
+        opacity: 0.85;
+        margin-bottom: 25px;
+    }
+
+    /* IKONA FILTRU */
+    .filter-icon {
+        font-size: 30px;
+        cursor: pointer;
+        float: right;
+        margin-top: -45px;
+        margin-right: 5px;
+    }
+
+    /* POPUP FILTRÓW */
+    .filter-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(20,20,20,0.9);
+        padding: 25px;
+        border-radius: 20px;
+        width: 300px;
+        border: 1px solid rgba(0,150,255,0.5);
+        box-shadow: 0 0 20px rgba(0,150,255,0.5);
+        z-index: 200;
+    }
+
+    .filter-popup h3 {
+        margin-top: 0;
+    }
+
+    .filter-popup label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+
+    .filter-popup input,
+    .filter-popup select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 10px;
+        border: none;
+        background: rgba(255,255,255,0.1);
+        color: white;
+    }
+
+    .filter-popup button {
+        margin-top: 15px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 12px;
+        border: none;
+        background: #4da6ff;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* SIATKA WYNIKÓW */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .item {
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(8px);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.15);
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .item:hover {
+        background: rgba(255,255,255,0.15);
+    }
+
+    .item h3 {
+        margin: 0 0 10px;
+    }
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="https://twoje-logo.pl/logo.png">
+    </div>
+
+    <nav>
+        <div class="nav-box">
+            <a href="/">Wiadomości</a>
+            <a href="/ramowka/">Ramówka</a>
+            <a href="/informacje/">Informacje</a>
+            <a href="/kontakt/">Kontakt</a>
+        </div>
+
+        <span class="search-icon material-symbols-rounded">search</span>
+    </nav>
+</header>
+
+<div id="searchBar" class="search-bar">
+    <input type="text" id="searchInput" placeholder="Szukaj...">
+</div>
+
+<section class="results">
+    <h1>Wyniki wyszukiwania dla "<span id="kw"></span>"</h1>
+
+    <div class="counts" id="counts"></div>
+
+    <span class="filter-icon material-symbols-rounded" id="filterBtn">filter_alt</span>
+
+    <div class="grid" id="resultsGrid"></div>
+</section>
+
+<!-- POPUP FILTRÓW -->
+<div class="filter-popup" id="filterPopup">
+    <h3>Filtry</h3>
+
+    <label>Rok</label>
+    <select id="filterYear">
+        <option value="">Dowolny</option>
+        <option>2026</option>
+        <option>2025</option>
+        <option>2024</option>
+    </select>
+
+    <label>Sortuj</label>
+    <select id="filterSort">
+        <option value="new">Najnowsze</option>
+        <option value="old">Najstarsze</option>
+    </select>
+
+    <label>Tagi</label>
+    <input type="text" id="filterTags" placeholder="np. muzyka, radio">
+
+    <label>Typ</label>
+    <select id="filterType">
+        <option value="all">Wszystko</option>
+        <option value="news">Tylko wiadomości</option>
+        <option value="podcast">Tylko podcasty</option>
+    </select>
+
+    <button onclick="closeFilters()">Zastosuj</button>
+    <button onclick="resetFilters()">Usuń filtry</button>
+</div>
+
+<script>
+/* Pobieranie keyword z URL */
+const params = new URLSearchParams(window.location.search);
+const keyword = params.get("keyword") || "";
+document.getElementById("kw").textContent = keyword;
+
+/* Przykładowe dane wyników */
+const results = [
+    { type: "news", title: "Wiadomość 1", link: "/wiadomosci?name=wiadomosc1" },
+    { type: "podcast", title: "Podcast 1", link: "/podcast?name=podcast1" },
+    { type: "news", title: "Wiadomość 2", link: "/wiadomosci?name=wiadomosc2" },
+    { type: "podcast", title: "Podcast 2", link: "/podcast?name=podcast2" }
+];
+
+/* Liczenie wyników */
+const newsCount = results.filter(r => r.type === "news").length;
+const podcastCount = results.filter(r => r.type === "podcast").length;
+
+document.getElementById("counts").textContent =
+    `Znaleziono: ${newsCount} wiadomości, ${podcastCount} podcastów.`;
+
+/* Wyświetlanie siatki */
+const grid = document.getElementById("resultsGrid");
+results.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `<h3>${r.title}</h3><p>Typ: ${r.type}</p>`;
+    div.onclick = () => window.location.href = r.link;
+    grid.appendChild(div);
+});
+
+/* Popup filtrów */
+const filterPopup = document.getElementById("filterPopup");
+document.getElementById("filterBtn").onclick = () => {
+    filterPopup.style.display = "block";
+};
+
+function closeFilters() {
+    filterPopup.style.display = "none";
+}
+
+function resetFilters() {
+    document.getElementById("filterYear").value = "";
+    document.getElementById("filterSort").value = "new";
+    document.getElementById("filterTags").value = "";
+    document.getElementById("filterType").value = "all";
+    filterPopup.style.display = "none";
+}
+
+/* Wyszukiwarka z lupy */
+const searchIcon = document.querySelector('.search-icon');
+const searchBar = document.getElementById('searchBar');
+const searchInput = document.getElementById('searchInput');
+let searchOpen = false;
+
+searchIcon.addEventListener('click', () => {
+    if (!searchOpen) {
+        searchBar.style.display = 'block';
+        searchInput.focus();
+        searchOpen = true;
+    } else {
+        const kw = searchInput.value.trim();
+        if (kw !== "") {
+            window.location.href = `/szukaj.html?keyword=${encodeURIComponent(kw)}`;
+        }
+        searchBar.style.display = 'none';
+        searchOpen = false;
+    }
+});
+
+searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const kw = searchInput.value.trim();
+        if (kw !== "") {
+            window.location.href = `/szukaj.html?keyword=${encodeURIComponent(kw)}`;
+        }
+    }
+});
+</script>
+
+</body>
+</html>
