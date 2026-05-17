@@ -248,7 +248,7 @@
         <option value="podcast">Tylko podcasty</option>
     </select>
 
-    <button onclick="closeFilters()">Zastosuj</button>
+    <button onclick="applyFilters(); closeFilters();">Zastosuj</button>
     <button onclick="resetFilters()">Usuń filtry</button>
 </div>
 
@@ -259,29 +259,80 @@ const keyword = params.get("keyword") || "";
 document.getElementById("kw").textContent = keyword;
 
 /* Przykładowe dane wyników */
-const results = [
-    { type: "news", title: "Wiadomość 1", link: "/wiadomosci?name=wiadomosc1" },
-    { type: "podcast", title: "Podcast 1", link: "/podcast?name=podcast1" },
-    { type: "news", title: "Wiadomość 2", link: "/wiadomosci?name=wiadomosc2" },
-    { type: "podcast", title: "Podcast 2", link: "/podcast?name=podcast2" }
+let results = [
+    { type: "news", title: "Wiadomość 1", year: 2026, tags: ["radio"], link: "/wiadomosci?name=wiadomosc1" },
+    { type: "podcast", title: "Podcast 1", year: 2025, tags: ["muzyka"], link: "/podcast?name=podcast1" },
+    { type: "news", title: "Wiadomość 2", year: 2024, tags: ["info"], link: "/wiadomosci?name=wiadomosc2" },
+    { type: "podcast", title: "Podcast 2", year: 2026, tags: ["rozmowa"], link: "/podcast?name=podcast2" }
 ];
 
-/* Liczenie wyników */
-const newsCount = results.filter(r => r.type === "news").length;
-const podcastCount = results.filter(r => r.type === "podcast").length;
+function applyFilters() {
+    let filtered = [...results];
 
-document.getElementById("counts").textContent =
-    `Znaleziono: ${newsCount} wiadomości, ${podcastCount} podcastów.`;
+    // keyword
+    if (keyword !== "") {
+        filtered = filtered.filter(r =>
+            r.title.toLowerCase().includes(keyword.toLowerCase())
+        );
+    }
+
+    // rok
+    const year = document.getElementById("filterYear").value;
+    if (year !== "") {
+        filtered = filtered.filter(r => r.year == year);
+    }
+
+    // tagi
+    const tags = document.getElementById("filterTags").value.trim().toLowerCase();
+    if (tags !== "") {
+        const tagList = tags.split(",").map(t => t.trim());
+        filtered = filtered.filter(r =>
+            tagList.every(t => r.tags.join(" ").toLowerCase().includes(t))
+        );
+    }
+
+    // typ
+    const type = document.getElementById("filterType").value;
+    if (type !== "all") {
+        filtered = filtered.filter(r => r.type === type);
+    }
+
+    // sortowanie
+    const sort = document.getElementById("filterSort").value;
+    if (sort === "new") {
+        filtered.sort((a, b) => b.year - a.year);
+    } else {
+        filtered.sort((a, b) => a.year - b.year);
+    }
+
+    renderResults(filtered);
+}
+
 
 /* Wyświetlanie siatki */
-const grid = document.getElementById("resultsGrid");
-results.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerHTML = `<h3>${r.title}</h3><p>Typ: ${r.type}</p>`;
-    div.onclick = () => window.location.href = r.link;
-    grid.appendChild(div);
-});
+function renderResults(list) {
+    const grid = document.getElementById("resultsGrid");
+    grid.innerHTML = "";
+
+    list.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<h3>${r.title}</h3><p>Typ: ${r.type}</p>`;
+        div.onclick = () => window.location.href = r.link;
+        grid.appendChild(div);
+    });
+
+    // liczenie wyników
+    const newsCount = list.filter(r => r.type === "news").length;
+    const podcastCount = list.filter(r => r.type === "podcast").length;
+
+    let text = "Znaleziono: ";
+    if (newsCount > 0) text += `${newsCount} wiadomości`;
+    if (newsCount > 0 && podcastCount > 0) text += ", ";
+    if (podcastCount > 0) text += `${podcastCount} podcastów`;
+
+    document.getElementById("counts").textContent = text;
+}
 
 /* Popup filtrów */
 const filterPopup = document.getElementById("filterPopup");
@@ -330,6 +381,9 @@ searchInput.addEventListener('keydown', (e) => {
         }
     }
 });
+
+
+applyFilters();
 </script>
 
 </body>
